@@ -41,6 +41,8 @@
 		<tool file="lapps_gate/gate.vpchunker_2.0.0.xml"/>
 	</section>
 	<section id="coref" name="Coreference">
+		<tool file="lapps_stanford/brandeis.coref.xml"/>
+		<tool file="lapps_opennlp/opennlp.coref.xml"/>
 		<tool file="lapps_gate/gate.coref_2.0.0.xml"/>
 	</section>
 	<section id="misc" name="Miscellaneous">
