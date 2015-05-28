@@ -3,19 +3,7 @@
   <command>echo "$input" > $output</command>
   <inputs>
     <param name="input" type="text" area="true" size="5x25">
-        <sanitizer sanitize="False"/>
-            <!--
-            <valid initial="string.printable"/>
-                <remove value="&apos;"/>
-                <remove value="&quot;"/>
-            </valid>
-            <mapping>
-                <add source="&apos;" target="\&apos;"/>
-                <add source="&quot;" target="\&quot;"/>
-            </mapping>
-        </sanitizer>
-            -->
-    </param>
+            <sanitizer sanitize="False"/>
   </inputs>
   <outputs>
     <data name="output" format="txt" label="Output"/>

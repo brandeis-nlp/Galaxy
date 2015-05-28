@@ -285,6 +285,11 @@ define(['utils/utils',
                 }
             });
 
+            // add expansion event handler
+            this.app.on('expand', function(input_id) {
+                (portlet.$el.find('#' + input_id).length > 0) && !visible && portlet.$header.trigger('click');
+            });
+
             // show sub section if requested
             if (input_def.expanded) {
                 portlet.$header.trigger('click');
@@ -311,9 +316,9 @@ define(['utils/utils',
 
             // create input field wrapper
             var input_element = new InputElement(this.app, {
-                label           : input_def.label,
+                label           : input_def.label || input_def.name,
                 default_value   : input_def.default_value,
-                optional        : input_def.optional,
+                collapsible     : input_def.collapsible,
                 help            : input_def.help,
                 field           : field
             });

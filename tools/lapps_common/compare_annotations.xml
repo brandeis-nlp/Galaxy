@@ -6,7 +6,7 @@
     <param name='input2' type='data' format='lif' label='Input #2' />
   </inputs>
   <outputs>
-    <data name='output' format='tabular' />
+    <data name='output' format='tabular' label='Compare'/>
   </outputs>
   <help>Compares the annotations in two input documents.
   </help>

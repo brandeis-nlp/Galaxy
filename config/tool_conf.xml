@@ -79,6 +79,9 @@
 	  <tool file='lapps_opennlp/opennlp.namedentityrecognizer.xml' />
 	  <tool file='lapps_opennlp/opennlp.parser.xml' />
 	</section>	
+	<section id="kyoto.grid" name="Kyoto Node">
+		<tool file='lapps_kyoto/opennlp_postagger.xml'/>
+	</section>
 	<section id="lapps.tools" name="Evaluation">
 		<tool file="lapps_common/pretty_print.xml"/>
 		<tool file="lapps_common/evaluation.xml"/>
@@ -105,6 +108,7 @@
       <tool file="lapps_test/tokenizer.xml"/>
       <tool file="lapps_test/tagger.xml"/>
       <tool file="lapps_test/ner.xml"/>
-      <tool file="lapps_test/text.xml"/>
+      <tool file="lapps_test/transform.xml"/>
+      <tool file="lapps_test/brat.xml"/>
   </section>
 </toolbox>

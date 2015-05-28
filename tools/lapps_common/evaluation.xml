@@ -7,7 +7,7 @@
     <param name='annotation' type='text' value='http://vocab.lappsgrid.org/Token'/>
   </inputs>
   <outputs>
-    <data name='output' format='json' />
+    <data name='output' format='json' label='Evaluation'/>
   </outputs>
   <help>Compares the annotation in two input documents.
   
