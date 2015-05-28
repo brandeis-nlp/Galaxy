@@ -9,7 +9,7 @@ a[selected="progress"]{background-image:url(../iui/loading.gif),url(../iui/selec
 body>.toolbar{position:relative;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;border-bottom:1px solid #2d3642;padding:10px;height:45px;background:url(../iui/toolbar.png) #6d84a2 repeat-x}
 .toolbar>h1{position:absolute;overflow:hidden;left:50%;margin:1px 0 0 -75px;height:45px;font-size:20px;width:150px;font-weight:bold;text-shadow:rgba(0,0,0,0.4) 0 -1px 0;text-align:center;text-overflow:ellipsis;white-space:nowrap;color:#FFFFFF}
 body[orient="landscape"]>.toolbar>h1{margin-left:-125px;width:250px}
-body>.toolbar.masthead{background:#2c3143}
+body>.toolbar.masthead{background:#3a5795}
 body>.toolbar.masthead>h1{left:0;margin-left:0;width:100%}
 .button{position:absolute;overflow:hidden;top:8px;right:6px;margin:0;border-width:0 5px;padding:0 3px;width:auto;height:30px;line-height:30px;font-family:inherit;font-size:12px;font-weight:bold;color:#FFFFFF;text-shadow:rgba(0,0,0,0.6) 0 -1px 0;text-overflow:ellipsis;text-decoration:none;white-space:nowrap;background:none;-webkit-border-image:url(../iui/toolButton.png) 0 5 0 5}
 .blueButton{-webkit-border-image:url(../iui/blueButton.png) 0 5 0 5;border-width:0 5px}
