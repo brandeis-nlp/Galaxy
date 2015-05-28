@@ -1,0 +1,9 @@
+#!/usr/bin/env lsd
+
+String lappsjson = new File(args[0]).text
+String username = ""
+String password = ""
+
+String url = "http://eldrad.cs-i.brandeis.edu:8282/json2json/0.3.0-SNAPSHOT/services/Json2JsonWS?wsdl"
+ServiceClient client = new ServiceClient(url, username, password)
+println client.execute(lappsjson)
