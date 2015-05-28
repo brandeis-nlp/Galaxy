@@ -34,6 +34,7 @@
 	<section id="parsers" name="Parsers">
 		<tool file='lapps_stanford/brandeis.parser.xml' />
 		<tool file='lapps_opennlp/opennlp.parser.xml' />
+		<tool file='lapps_stanford/brandeis.dependencyparser.xml' />
 	</section>
 	<section id="chunkers" name="Chunkers">
 		<tool file="lapps_gate/gate.npchunker_2.0.0.xml"/>
