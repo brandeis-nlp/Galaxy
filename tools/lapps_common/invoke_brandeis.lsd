@@ -10,3 +10,5 @@ String url = "http://eldrad.cs-i.brandeis.edu:8080/service_manager/invoker/brand
 ServiceClient client = new ServiceClient(url, username, password)
 String json = new File(input).text
 new File(output).text = client.execute(json)
+
+

@@ -26,13 +26,11 @@
     <datatype extension="xml" type="galaxy.datatypes.xml:GenericXml" mimetype="application/xml" display_in_upload="true"/>
     <datatype extension="bgzip" type="galaxy.datatypes.binary:Binary" subclass="True" />
     <datatype extension="xls" type="galaxy.datatypes.tabular:Tabular"/>
-    <datatype extension="json" type="galaxy.datatypes.text:Json" display_in_upload="True">
-    	<converter file="lif_to_gate_converter.xml" target_datatype="gate"/>
-    </datatype>
-    <datatype extension="lif" type="galaxy.datatypes.text:Json" display_in_upload="True">
+    <datatype extension="json" type="galaxy.datatypes.text:Json" display_in_upload="True"/>
+    <datatype extension="lif" type="galaxy.datatypes.text:Lif" display_in_upload="True">
       <converter file="lif_to_gate_converter.xml" target_datatype="gate"/>
     </datatype>
-    <datatype extension="gate" type="galaxy.datatypes.xml:GenericXml" mimetype="application/xml" display_in_upload="true">
+    <datatype extension="gate" type="galaxy.datatypes.text:Gate" display_in_upload="true">
       <converter file="gate_to_lif_converter.xml" target_datatype="lif"/>
       <converter file="gate_to_lif_converter.xml" target_datatype="json"/>
     </datatype>

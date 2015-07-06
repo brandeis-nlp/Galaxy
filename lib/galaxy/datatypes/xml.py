@@ -146,3 +146,4 @@ class Owl( GenericXml ):
                 if owl_marker.search( line ):
                     return True
         return False
+
