@@ -1,0 +1,10 @@
+<tool id='gnat.namedentityrecognizer' name='Manchester Gnat NamedEntityRecognizer' version='0.0.1'>
+  <description>Manchester Gnat NamedEntityRecognizer  (Brandeis)</description>
+  <command interpreter='lsd'>../lapps_common/invoke_brandeis.lsd gnat.namedentityrecognizer $input $output</command>
+  <inputs>
+    <param name='input' type='data' format='lif' label='input' />
+  </inputs>
+  <outputs>
+    <data name='output' format='lif' />
+  </outputs>
+</tool>
