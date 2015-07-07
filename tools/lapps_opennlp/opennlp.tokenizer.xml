@@ -1,5 +1,5 @@
-<tool id='opennlp.tokenizer' name='OpenNLP Tokenizer' version='2.0.0'>
-  <description>OpenNLP Tokenizer</description>
+<tool id='opennlp.tokenizer' name='OpenNLP Tokenizer v2.0.0' version='2.0.0'>
+  <description>(Brandeis)</description>
   <command interpreter='lsd'>../lapps_common/invoke_brandeis.lsd opennlp.tokenizer $input $output</command>
   <inputs>
     <param name='input' type='data' format='lif' label='input' />
