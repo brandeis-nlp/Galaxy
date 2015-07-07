@@ -2,7 +2,7 @@
   <description>(Brandeis)</description>
   <command interpreter='lsd'>../lapps_common/invoke_brandeis.lsd stanfordnlp.splitter $input $output</command>
   <inputs>
-    <param name='input' type='data' format='lif' label='input' />
+    <param name='input' type='data' format='text' label='input' />
   </inputs>
   <outputs>
     <data name='output' format='lif' />

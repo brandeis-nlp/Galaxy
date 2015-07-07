@@ -7,31 +7,31 @@ reload(sys);
 sys.setdefaultencoding('utf8');
 
 bratdsl = """{
-def idx = 0
-def lastview = &$payload.views[-1]
-def lastviewanns = lastview==null?null:lastview.annotations
-def lastviewfeatures = lastviewanns==null?null:lastviewanns.features
-def parse = lastviewfeatures == null? null:lastviewfeatures.select{&.penntree!=null}.penntree
-def coref = lastviewanns.select{&."@type"=="http://vocab.lappsgrid.org/Coreference"}.features.mentions
-def markables = lastviewanns.select{&."@type"=="http://vocab.lappsgrid.org/Markable" && coref.toString().contains(&.id)}
+     def idx = 0
+     def lastview = &$payload.views[-1]
+     def lastviewanns = lastview==null?null:lastview.annotations
+     def lastviewfeatures = lastviewanns==null?null:lastviewanns.features
+     def parse = lastviewfeatures == null? null:lastviewfeatures.select{&.penntree!=null}.penntree
+     def coref = lastviewanns.select{&."@type" != null && &."@type".contains("Coreference")}.features.mentions
+     def markables = lastviewanns.select{&."@type" != null && &."@type".contains("Markable") && coref.toString().contains(&.id)}
 
-text &$payload.text."@value" + (parse == null||parse.length == 0||parse[0]==null?"":parse[0])
+     text &$payload.text."@value" +  (parse == null||parse.size == 0||parse[0]==null?"":"\n~~~~\n"+parse[0])
 
-relations (lastviewanns.select{&."@type"=="http://vocab.lappsgrid.org/DependencyStructure"}.features.dependencies
-.flatten().foreach{
-["D${idx++}", &.label, [["Governor", &.features.governor], ["Dependent", &.features.dependent]]]
-})
+     relations (lastviewanns.select{&."@type" != null && &."@type".contains("DependencyStructure")}.features.dependencies
+                .flatten().foreach{
+                ["D${idx++}", &.label, [["Governor", &.features.governor], ["Dependent", &.features.dependent]]]
+                })
 
-equivs (lastviewanns.select{&."@type"=="http://vocab.lappsgrid.org/Coreference"}.features
-.flatten().foreach{
-["*", "Coreference", &.mentions[0], &.mentions[1]]
-})
+     equivs (lastviewanns.select{&."@type" != null && &."@type".contains("Coreference")}.features
+                .flatten().foreach{
+                                 ["*", "Coreference", &.mentions[0], &.mentions[1]]
+                                 })
 
-entities (lastviewanns.unique{&.start+" "+&.end}.select{&.features != null && (&.features.category != null || &.features.pos != null)}.foreach{
-[&.id == null?"T${idx++}":&.id, &.features.category != null?&.features.category.trim().toUpperCase():&.features.pos.trim().toUpperCase(), [[&.start.toInteger(), &.end.toInteger()]]]
-} + markables.foreach{
-[&.id == null?"M${idx++}":&.id, "Mention", [[&.start.toInteger(), &.end.toInteger()]]]
-})
+     entities (lastviewanns.unique{&.start+" "+&.end}.select{&.features != null && (&.features.category != null || &.features.pos != null)}.foreach{
+       [&.id == null?"T${idx++}":&.id, &.features.category != null?&.features.category.trim().toUpperCase():&.features.pos.trim().toUpperCase(), [[&.start.toInteger(), &.end.toInteger()]]]
+     } + markables.foreach{
+       [&.id == null?"M${idx++}":&.id, "Mention", [[&.start.toInteger(), &.end.toInteger()]]]
+     })
 }
 """
 
@@ -121,11 +121,33 @@ root = h.url_for( '/' )
             return $("#"+textareaId).val();
         }
 
+
+
+    var renderDotDisplay = function(dotDisplayId, inputId) {
+        var docData = getTextAreaValue(inputId);
+        // When has parser result.
+        if (docData.indexOf("~~~~") > 0) {
+            var docJSON = jQuery.parseJSON(docData.trim());
+            var lisp = docJSON.text.split("~~~~")[1];
+            console.log(lisp);
+            var dot = lisp2dot(lisp);
+            var svg = Viz(dot, "svg");
+            var dotDisplay = $('#' + dotDisplayId);
+            dotDisplay.html("");
+            dotDisplay.html(svg);
+            dotDisplay.show();
+        } else {
+            var dotDisplay = $('#' + dotDisplayId);
+            dotDisplay.html("");
+            dotDisplay.hide();
+        }
+    }
+
         var docChangeHandler = function(liveDispatcher, textareaId){
             var docInput = getTextAreaValue(textareaId);
             var docJSON;
             try {
-                docJSON = JSON.parse(docInput.trim());
+                docJSON = jQuery.parseJSON(docInput.trim());
             } catch (e) {
                 console.error('invalid JSON Data:', e);
                 return;
@@ -143,7 +165,7 @@ root = h.url_for( '/' )
             var collInput = getTextAreaValue(textareaId);
             var collJSON;
             try {
-                collJSON = JSON.parse(collInput.trim());
+                collJSON = jQuery.parseJSON(collInput.trim());
             } catch (e) {
                 console.error('invalid JSON Data:', e);
                 return;
@@ -162,15 +184,15 @@ root = h.url_for( '/' )
             $("#"+textareaId).bind(listenTo, handler);
         }
 
-        var renderBratDisplay =  function (displayId, inputId, confInputId) {
+        var renderBratDisplay =  function (displayId, inputId, confInputId, dotDisplayId) {
             var docData = getTextAreaValue(inputId);
             var collData = getTextAreaValue(confInputId);
             // Time for some "real" brat coding, let's hook into the dispatcher
             var liveDispatcher;
             try{
                 liveDispatcher = Util.embed(displayId,
-                    $.extend({'collection': null}, JSON.parse(collData.trim())),
-                    $.extend({}, JSON.parse(docData.trim())), webFontURLs);
+                    $.extend({'collection': null}, jQuery.parseJSON(collData.trim())),
+                    $.extend({}, jQuery.parseJSON(docData.trim())), webFontURLs);
                 console.info("Finished: liveDispatch");
             }catch(e) {
                 console.error("ERROR: "+e+" ;doc="+docData+"; coll="+collData);
@@ -183,6 +205,7 @@ root = h.url_for( '/' )
 
             onchange(inputId, function() {
                 docChangeHandler(liveDispatcher, inputId);
+                renderDotDisplay(dotDisplayId, inputId);
             });
 
             onchange(confInputId, function() {
@@ -200,15 +223,29 @@ root = h.url_for( '/' )
                 return s
             }
             // when input doc data changed
-            // liveDispatcher.post('requestRenderData', [$.extend({}, JSON.parse(docInput.val()))]);
+            // liveDispatcher.post('requestRenderData', [$.extend({}, jQuery.parseJSON(docInput.val()))]);
 
             // when config input coll data changed
-            // liveDispatcher.post('collectionLoaded',  [$.extend({'collection': null}, JSON.parse(collInput.val()))]);
+            // liveDispatcher.post('collectionLoaded',  [$.extend({'collection': null}, jQuery.parseJSON(collInput.val()))]);
         }
         head.ready(function() {
-            renderBratDisplay("instantbratdisplay", "docjson", "colljson");
+            renderBratDisplay("instantbratdisplay", "docjson", "colljson", "instantdotdisplay");
         });
     </script>
+    <style type="text/css">
+        #instantdotdisplay {
+            display:none;
+            width:800px;
+            height:400px;
+            overflow:scroll;
+        }
+        #instantdotdisplay svg {
+            width: auto;
+            height: auto;
+            border: 1px solid #7fa2ff;
+            font-size: 15px;
+        }
+    </style>
 </head>
 
 
@@ -221,6 +258,7 @@ root = h.url_for( '/' )
     <table align="center" class="table table-bordered table-striped responsive-utilities" align="center" style="width:800px;">
         <tr><th> Brat Display </th></tr>
         <tr><td height="100px"><div id="instantbratdisplay"></div></td></tr>
+        <tr><td><div id="instantdotdisplay"></div></td></tr>
     </table>
     <textarea style="display:none" id="docjson">${bratjson}</textarea>
     <textarea style="display:none" id="colljson">${bratconf}</textarea>
