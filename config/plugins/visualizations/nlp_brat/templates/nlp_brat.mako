@@ -215,7 +215,7 @@ root = h.url_for( '/' )
     LappsGrid, <var>Version 0.3.0</var>,  May 2015</p>
 
     <table align="center" class="table table-bordered table-striped responsive-utilities" align="center" style="width:800px;">
-        <tr><th> Brat Display </th></tr>
+        <tr><th> Display </th></tr>
         <tr><td height="100px"><div id="instantbratdisplay"></div></td></tr>
     </table>
     <textarea style="display:none" id="docjson">${bratjson}</textarea>
