@@ -300,7 +300,7 @@ root = h.url_for( '/' )
 
 
     <table align="center" class="table table-bordered table-striped responsive-utilities" align="center" style="width:800px;">
-        <tr><th> Brat Display </th></tr>
+        <tr><th> Display </th></tr>
         <tr><td height="100px"><div id="instantbratdisplay"></div></td></tr>
         <tr><td><div id="instantdotdisplay" style="display:none">Loading ...</div></td></tr>
     </table>
