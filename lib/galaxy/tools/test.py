@@ -48,7 +48,7 @@ class ToolTestBuilder( object ):
         self.name = name
         self.maxseconds = maxseconds
         self.required_files = []
-        self.inputs = []
+        self.inputs = {}
         self.outputs = []
         # By default do not making assertions on number of outputs - but to
         # test filtering allow explicitly state number of outputs.
@@ -134,6 +134,7 @@ class ToolTestBuilder( object ):
             self.expect_failure = test_dict.get("expect_failure", False)
             self.md5 = test_dict.get("md5", None)
         except Exception, e:
+            self.inputs = {}
             self.error = True
             self.exception = e
 
@@ -156,7 +157,8 @@ class ToolTestBuilder( object ):
                     for input_name, input_value in case.inputs.items():
                         case_inputs = self.__process_raw_inputs( { input_name: input_value }, raw_inputs, parent_context=cond_context )
                         expanded_inputs.update( case_inputs )
-                    expanded_case_value = self.__split_if_str( case.value )
+                    if not value.type == "text":
+                        expanded_case_value = self.__split_if_str( case.value )
                     if case_value is not None:
                         # A bit tricky here - we are growing inputs with value
                         # that may be implicit (i.e. not defined by user just
@@ -191,7 +193,8 @@ class ToolTestBuilder( object ):
                 raw_input = context.extract_value( raw_inputs )
                 if raw_input:
                     (name, param_value, param_extra) = raw_input
-                    param_value = self.__split_if_str( param_value )
+                    if not value.type == "text":
+                        param_value = self.__split_if_str( param_value )
                     if isinstance( value, galaxy.tools.parameters.basic.DataToolParameter ):
                         if not isinstance(param_value, list):
                             param_value = [ param_value ]
@@ -252,7 +255,9 @@ def _process_simple_value( param, param_value ):
 
 def _process_bool_param_value( param, param_value ):
     assert isinstance( param, galaxy.tools.parameters.basic.BooleanToolParameter )
+    was_list = False
     if isinstance( param_value, list ):
+        was_list = True
         param_value = param_value[0]
     if param.truevalue == param_value:
         processed_value = True
@@ -260,7 +265,7 @@ def _process_bool_param_value( param, param_value ):
         processed_value = False
     else:
         processed_value = string_as_bool( param_value )
-    return processed_value
+    return [ processed_value ] if was_list else processed_value
 
 
 @nottest

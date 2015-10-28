@@ -1,9 +1,8 @@
 <tool id="masc.load" name="MASC Load" version="1.0.0">
-  <description>Retrieves a single of document from MASC.</description>
+  <description>Retrieves a single document from MASC.</description>
   <command interpreter="lsd">masc_load.lsd $token $input $output</command>
   <inputs>
     <param name="input" type="data" format="txt"/>
-    <param name="token" type="text" label="OAuth Token" value="123abc"/>
   </inputs>
   <outputs>
     <data name="output" format="lif" label="Output"/>

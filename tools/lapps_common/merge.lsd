@@ -2,9 +2,9 @@
 import static org.lappsgrid.discriminator.Discriminators.Uri
 
 String annotationType = args[0]
-File input1 = new File(args[2])
-File input2 = new File(args[3])
-File output = new File(args[4])
+File input1 = new File(args[1])
+File input2 = new File(args[2])
+File output = new File(args[3])
 
 class DataContainer extends Data<Container> { }
 

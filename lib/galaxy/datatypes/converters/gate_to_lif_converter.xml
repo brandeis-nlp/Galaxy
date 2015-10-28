@@ -5,7 +5,7 @@
     <param name='input' type='data' format='gate' label='input' />
   </inputs>
   <outputs>
-    <data name='output' format='json' />
+    <data name='output' format='lif' />
   </outputs>
   <help>Converts GATE documents to the LAPPS JSON/LD format.</help>
 </tool>

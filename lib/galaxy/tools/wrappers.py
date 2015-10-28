@@ -9,7 +9,7 @@ log = getLogger( __name__ )
 
 # Fields in .log files corresponding to paths, must have one of the following
 # field names and all such fields are assumed to be paths. This is to allow
-# remote ComputeEnvironments (such as one used by LWR) determine what values to
+# remote ComputeEnvironments (such as one used by Pulsar) determine what values to
 # rewrite or transfer...
 PATH_ATTRIBUTES = [ "path" ]
 # ... by default though - don't rewrite anything (if no ComputeEnviornment
@@ -50,7 +50,7 @@ class RawObjectWrapper( ToolParameterValueWrapper ):
         try:
             return "%s:%s" % (self.obj.__module__, self.obj.__class__.__name__)
         except:
-            #Most likely None, which lacks __module__.
+            # Most likely None, which lacks __module__.
             return str( self.obj )
 
     def __getattr__( self, key ):
@@ -159,7 +159,7 @@ class DatasetFilenameWrapper( ToolParameterValueWrapper ):
                 # again
                 setattr( self, name, rval )
             else:
-                #escape string value of non-defined metadata value
+                # escape string value of non-defined metadata value
                 rval = wrap_with_safe_string( rval )
             return rval
 
@@ -187,7 +187,7 @@ class DatasetFilenameWrapper( ToolParameterValueWrapper ):
                 ext = 'data'
             self.dataset = wrap_with_safe_string( NoneDataset( datatypes_registry=datatypes_registry, ext=ext ), no_wrap_classes=ToolParameterValueWrapper )
         else:
-            # Tool wrappers should not normally be accessing .dataset directly, 
+            # Tool wrappers should not normally be accessing .dataset directly,
             # so we will wrap it and keep the original around for file paths
             # Should we name this .value to maintain consistency with most other ToolParameterValueWrapper?
             self.unsanitized = dataset
@@ -276,6 +276,7 @@ class DatasetListWrapper( list, ToolParameterValueWrapper, HasDatasets ):
             return self._dataset_wrapper( dataset, dataset_paths, **kwargs )
 
         list.__init__( self, map( to_wrapper, datasets ) )
+
     def __str__( self ):
         return ','.join( map( str, self ) )
 

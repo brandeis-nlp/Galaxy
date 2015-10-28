@@ -3,6 +3,7 @@
   <command interpreter='lsd'>../lapps_common/invoke_brandeis.lsd stanfordnlp.tokenizer $input $output</command>
   <inputs>
     <param name='input' type='data' format='text' label='input' />
+    <!--<param name='input' type='data' format='lif,json' label='input' />-->
   </inputs>
   <outputs>
     <data name='output' format='lif' />

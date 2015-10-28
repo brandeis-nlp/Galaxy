@@ -17,6 +17,7 @@ import subprocess
 import sys
 import traceback
 from galaxy import model, util
+from galaxy.util.xml_macros import load
 from galaxy.datatypes import metadata
 from galaxy.exceptions import ObjectInvalid, ObjectNotFound
 from galaxy.jobs.actions.post import ActionBox
@@ -94,7 +95,7 @@ class JobToolConfiguration( Bunch ):
 def config_exception(e, file):
     abs_path = os.path.abspath(file)
     message = 'Problem parsing the XML in file %s, ' % abs_path
-    message += 'please correct the indicated portion of the file and restart Galaxy.'
+    message += 'please correct the indicated portion of the file and restart Galaxy. '
     message += str(e)
     log.exception(message)
     return Exception(message)
@@ -129,7 +130,7 @@ class JobConfiguration( object ):
         # Initialize the config
         job_config_file = self.app.config.job_config_file
         try:
-            tree = util.parse_xml(job_config_file)
+            tree = load(job_config_file)
             self.__parse_job_conf_xml(tree)
         except IOError:
             log.warning( 'Job configuration "%s" does not exist, using legacy'
@@ -191,6 +192,9 @@ class JobConfiguration( object ):
                             else:
                                 self.handlers[tag] = [id]
 
+        # Must define at least one handler to have a default.
+        if not self.handlers:
+            raise ValueError("Job configuration file defines no valid handler elements.")
         # Determine the default handler(s)
         self.default_handler_id = self.__get_default(handlers, self.handlers.keys())
 
@@ -285,9 +289,8 @@ class JobConfiguration( object ):
         """
         log.debug('Loading job configuration from %s' % self.app.config.config_file)
 
-        # Always load local and lwr
-        self.runner_plugins = [dict(id='local', load='local', workers=self.app.config.local_job_queue_workers),
-                               dict(id='lwr', load='lwr', workers=self.app.config.cluster_job_queue_workers)]
+        # Always load local
+        self.runner_plugins = [dict(id='local', load='local', workers=self.app.config.local_job_queue_workers)]
         # Load tasks if configured
         if self.app.config.use_tasked_jobs:
             self.runner_plugins.append(dict(id='tasks', load='tasks', workers=self.app.config.local_task_queue_workers))
@@ -795,6 +798,10 @@ class JobWrapper( object ):
             self.__galaxy_lib_dir = os.path.abspath( "lib" )  # cwd = galaxy root
         return self.__galaxy_lib_dir
 
+    @property
+    def galaxy_virtual_env(self):
+        return os.environ.get('VIRTUAL_ENV', None)
+
     # legacy naming
     get_job_runner = get_job_runner_url
 
@@ -855,7 +862,7 @@ class JobWrapper( object ):
 
         self.sa_session.flush()
 
-        self.command_line, self.extra_filenames = tool_evaluator.build()
+        self.command_line, self.extra_filenames, self.environment_variables = tool_evaluator.build()
         # Ensure galaxy_lib_dir is set in case there are any later chdirs
         self.galaxy_lib_dir
         # Shell fragment to inject dependencies
@@ -1035,6 +1042,10 @@ class JobWrapper( object ):
     def change_state( self, state, info=False ):
         job = self.get_job()
         self.sa_session.refresh( job )
+        if job.state in model.Job.terminal_states:
+            log.warning( "(%s) Ignoring state change from '%s' to '%s' for job "
+                         "that is already terminal", job.id, job.state, state )
+            return
         for dataset_assoc in job.output_datasets + job.output_library_datasets:
             dataset = dataset_assoc.dataset
             self.sa_session.refresh( dataset )
@@ -1188,8 +1199,8 @@ class JobWrapper( object ):
                     # either use the metadata from originating output dataset, or call set_meta on the copies
                     # it would be quicker to just copy the metadata from the originating output dataset,
                     # but somewhat trickier (need to recurse up the copied_from tree), for now we'll call set_meta()
-                    if ( not self.external_output_metadata.external_metadata_set_successfully( dataset, self.sa_session )
-                         and self.app.config.retry_metadata_internally ):
+                    if ( self.app.config.retry_metadata_internally
+                            and not self.external_output_metadata.external_metadata_set_successfully(dataset, self.sa_session ) ):
                         # If Galaxy was expected to sniff type and didn't - do so.
                         if dataset.ext == "_sniff_":
                             extension = sniff.handle_uploaded_dataset_file( dataset.dataset.file_name, self.app.datatypes_registry )
@@ -1197,8 +1208,8 @@ class JobWrapper( object ):
 
                         # call datatype.set_meta directly for the initial set_meta call during dataset creation
                         dataset.datatype.set_meta( dataset, overwrite=False )
-                    elif ( not self.external_output_metadata.external_metadata_set_successfully( dataset, self.sa_session )
-                           and job.states.ERROR != final_job_state ):
+                    elif ( job.states.ERROR != final_job_state
+                            and not self.external_output_metadata.external_metadata_set_successfully( dataset, self.sa_session ) ):
                         dataset._state = model.Dataset.states.FAILED_METADATA
                     else:
                         # load metadata from file
@@ -1271,7 +1282,7 @@ class JobWrapper( object ):
         # The exit code will be null if there is no exit code to be set.
         # This is so that we don't assign an exit code, such as 0, that
         # is either incorrect or has the wrong semantics.
-        if None != tool_exit_code:
+        if tool_exit_code is not None:
             job.exit_code = tool_exit_code
         # custom post process setup
         inp_data = dict( [ ( da.name, da.dataset ) for da in job.input_datasets ] )
@@ -1315,14 +1326,14 @@ class JobWrapper( object ):
                              tool=self.tool, stdout=job.stdout, stderr=job.stderr )
         job.command_line = self.command_line
 
-        bytes = 0
+        collected_bytes = 0
         # Once datasets are collected, set the total dataset size (includes extra files)
         for dataset_assoc in job.output_datasets:
             dataset_assoc.dataset.dataset.set_total_size()
-            bytes += dataset_assoc.dataset.dataset.get_total_size()
+            collected_bytes += dataset_assoc.dataset.dataset.get_total_size()
 
         if job.user:
-            job.user.total_disk_usage += bytes
+            job.user.adjust_total_disk_usage(collected_bytes)
 
         # Empirically, we need to update job.user and
         # job.workflow_invocation_step.workflow_invocation in separate
@@ -1394,7 +1405,7 @@ class JobWrapper( object ):
         job = has_metrics.get_job()
         per_plugin_properties = self.app.job_metrics.collect_properties( job.destination_id, self.job_id, self.working_directory )
         if per_plugin_properties:
-            log.info( "Collecting job metrics for %s" % has_metrics )
+            log.info( "Collecting metrics for %s %s" % ( type(has_metrics).__name__, getattr( has_metrics, 'id', None ) ) )
         for plugin, properties in per_plugin_properties.iteritems():
             for metric_name, metric_value in properties.iteritems():
                 if metric_value is not None:
@@ -1596,6 +1607,7 @@ class JobWrapper( object ):
                                                                       config_file=config_file,
                                                                       datatypes_config=datatypes_config,
                                                                       job_metadata=os.path.join( self.working_directory, TOOL_PROVIDED_JOB_METADATA_FILE ),
+                                                                      max_metadata_value_size=self.app.config.max_metadata_value_size,
                                                                       **kwds )
 
     @property
@@ -1741,7 +1753,7 @@ class TaskWrapper(JobWrapper):
 
         self.sa_session.flush()
 
-        self.command_line, self.extra_filenames = tool_evaluator.build()
+        self.command_line, self.extra_filenames, self.environment_variables = tool_evaluator.build()
 
         # Ensure galaxy_lib_dir is set in case there are any later chdirs
         self.galaxy_lib_dir

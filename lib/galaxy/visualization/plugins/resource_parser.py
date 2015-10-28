@@ -23,7 +23,7 @@ class ResourceParser( object ):
     in a new dictionary.
 
     The keys used to store the new values can optionally be re-mapped to
-    new keys (e.g. dataset_id="NNN" -> hda=<HistoryDatasetAsscoation>).
+    new keys (e.g. dataset_id="NNN" -> hda=<HistoryDatasetAssociation>).
     """
     primitive_parsers = {
         'str'   : lambda param: galaxy.util.sanitize_html.sanitize_html( param, 'utf-8' ),
@@ -71,7 +71,7 @@ class ResourceParser( object ):
                 try:
                     target_param_modifiers = params_that_modify_other_params.get( param_name, None )
                     resource = self.parse_parameter( trans, param_config,
-                        query_val, param_modifiers=target_param_modifiers )
+                                                     query_val, param_modifiers=target_param_modifiers )
 
                 except Exception, exception:
                     if trans.debug:
@@ -108,8 +108,8 @@ class ResourceParser( object ):
                     config_val = self.parse_parameter( trans, param_config, config_val )
 
                 except Exception, exception:
-                    log.warn( 'Exception parsing visualization param from query: '
-                        + '%s, %s, (%s) %s' % ( param_name, config_val, str( type( exception ) ), str( exception ) ))
+                    log.warn( 'Exception parsing visualization param from query: ' +
+                              '%s, %s, (%s) %s' % ( param_name, config_val, str( type( exception ) ), str( exception ) ))
                     config_val = None
 
             # here - we've either had no value in the query_params or there was a failure to parse

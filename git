@@ -1,0 +1,21 @@
+#!/bin/bash
+
+repo=$2
+if [ -z "$repo" ] ; then
+    repo=lappsdev
+fi
+
+case $1 in
+     pull|push)
+	sudo -u galaxy /usr/bin/git $1 origin $repo
+	;;
+     checkout)
+	sudo -u galaxy /usr/bin/git checkout $repo
+	;;
+     commit)
+        sudo -u galaxy /usr/bin/git $@
+	;;
+     *)
+        echo "Unrecognized option. Maybe invoke /usr/bin/git directly."
+	;;
+esac

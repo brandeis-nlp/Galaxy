@@ -1,4 +1,4 @@
- <%namespace name="ie" file="ie.mako" />
+<%namespace name="ie" file="ie.mako" />
 
 <%
 import os
@@ -16,7 +16,7 @@ if ie_request.attr.PASSWORD_AUTH:
     m.update( ie_request.notebook_pw + ie_request.notebook_pw_salt )
     PASSWORD = 'sha1:%s:%s' % (ie_request.notebook_pw_salt, m.hexdigest())
 else:
-	PASSWORD = "none"
+    PASSWORD = "none"
 
 ## IPython Specific
 # Prepare an empty notebook
@@ -26,23 +26,22 @@ with open( os.path.join( ie_request.attr.our_template_dir, 'notebook.ipynb' ), '
 empty_nb = empty_nb % notebook_id
 # Copy over default notebook, unless the dataset this viz is running on is a notebook
 empty_nb_path = os.path.join(temp_dir, 'ipython_galaxy_notebook.ipynb')
+
 if hda.datatype.__class__.__name__ != "Ipynb":
     with open( empty_nb_path, 'w+' ) as handle:
         handle.write( empty_nb )
 else:
     shutil.copy( hda.file_name, empty_nb_path )
 
-
-## General IE specific
-# Access URLs for the notebook from within galaxy.
-notebook_access_url = ie_request.url_template('${PROXY_URL}/ipython/${PORT}/notebooks/ipython_galaxy_notebook.ipynb')
-notebook_login_url = ie_request.url_template('${PROXY_URL}/ipython/${PORT}/login?next=%2Fipython%2F${PORT}%2Ftree')
-
-
 # Add all environment variables collected from Galaxy's IE infrastructure
 ie_request.launch(env_override={
     'notebook_password': PASSWORD,
 })
+
+## General IE specific
+# Access URLs for the notebook from within galaxy.
+notebook_access_url = ie_request.url_template('${PROXY_URL}/ipython/notebooks/ipython_galaxy_notebook.ipynb')
+notebook_login_url = ie_request.url_template('${PROXY_URL}/ipython/login?next=${PROXY_PREFIX}%2Fipython%2Ftree')
 
 %>
 <html>

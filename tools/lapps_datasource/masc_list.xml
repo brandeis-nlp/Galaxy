@@ -1,8 +1,9 @@
-<tool id="masc.list" name="List MASC" version="2.0.0">
+<tool id="masc.list" name="List MASC" version="2.1.0">
   <description>Lists all keys in MASC.</description>
-  <command interpreter="lsd">list.lsd $token $output</command>
+  <command interpreter="lsd">masc_list.lsd $start $end $output</command>
   <inputs>
-    <param name="token" type="text" label="OAuth Token" value="123abc"/>
+  	<param name="start" type="integer" label="Start" value="0" min="0" max="392"/>
+  	<param name="end" type="integer" label="End" value="392" min="0" max="392"/>
   </inputs>
   <outputs>
     <data name="output" format="txt"/>
@@ -15,5 +16,5 @@
     </test>
   </tests>
   -->
-  <help>Tokenizes the input file and writes the result to the output file.</help>
+  <help>Retreives a list of all document IDs managed by this data source.</help>
 </tool>

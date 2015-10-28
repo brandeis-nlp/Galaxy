@@ -1,0 +1,32 @@
+#!/usr/bin/env lsd
+
+import org.lappsgrid.discriminator.Discriminators.Uri
+include 'Config'
+
+String pattern = args[0]
+File output = new File(args[1])
+
+def url = "${server.url}/${masc.id}"
+
+// Call the service to get a list of document ID values.
+def service = new ServiceClient(url, server.username, server.password)
+Data data = new Data(Uri.QUERY, pattern)
+String json = service.execute(data.asJson())
+data = Serializer.parse(json, Data)
+if (Uri.ERROR == data.discriminator) {
+	output.text = json
+	return
+}
+if (Uri.STRING_LIST != data.discriminator) {
+	String message = "Invalid discriminator. Expected ${Uri.STRING_LIST}. Found ${data.discriminator}"
+	data = new Data(Uri.ERROR, message)
+	output.text = data.asPrettyJson()
+	return
+}
+
+def list = data.payload
+// Write the ID values to the output file.
+output.withWriter { out ->
+    list.each { out.println it }
+}
+

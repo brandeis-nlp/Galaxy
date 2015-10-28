@@ -4,6 +4,7 @@
   <inputs>
     <param name="input" type="text" area="true" size="5x25">
             <sanitizer sanitize="False"/>
+    </param>
   </inputs>
   <outputs>
     <data name="output" format="txt" label="Output"/>

@@ -6,29 +6,18 @@
 module.exports = function( grunt ){
     "use strict";
 
-    var DIST_PATH = '../static/scripts',
-        MAPS_PATH = '../static/maps',
-        // this symlink allows us to serve uncompressed scripts in DEV_PATH for use with sourcemaps
-        SRC_SYMLINK = '../static/src';
-
-    // compress javascript
-    grunt.config( 'uglify', {
-        target : {
-            files: [{
-                expand : true,
-                cwd : SRC_SYMLINK,
-                src : '**/*.js',
-                dest : DIST_PATH
-            }],
-            options : {
-                sourceMap : true,
-                sourceMapName : function( path ){
-                    // rewrite name to have all source maps in 'static/maps'
-                    return path.replace( DIST_PATH, MAPS_PATH ) + '.map';
-                }
+    var app = grunt.config.get( 'app' ),
+        paths = grunt.config.get( 'paths' ),
+        // uglify settings used when scripts are decompressed/not-minified
+        decompressedSettings = {
+            mangle   : false,
+            beautify : true,
+            compress : {
+                drop_debugger : false
             }
         },
-        options : {
+        // uglify settings used when scripts are compressed/minified
+        compressedSettings = {
             mangle : {
                 screw_ie8 : true
             },
@@ -48,38 +37,58 @@ module.exports = function( grunt ){
                 if_return : true,
                 join_vars : true,
                 cascade : true,
-                // drop_console : true
             }
+        };
+
+    grunt.config( 'uglify', {
+        target : {
+            files: [{
+                expand : true,
+                cwd : paths.srcSymlink,
+                src : '**/*.js',
+                dest : paths.dist
+            }],
         }
     });
 
-    // use 'grunt watch' (from a new tab in your terminal) to have grunt re-copy changed files automatically
-    grunt.config( 'watch', {
-        watch: {
-            // watch for changes in the src dir
-            files: [ SRC_SYMLINK + '/**' ],
-            tasks: [ 'uglify' ],
-            // tasks: [ 'copy', 'pack' ],
-            options: {
-                spawn: false
+
+    if (grunt.option( 'develop' )){
+        grunt.config( 'uglify.options', decompressedSettings );
+
+    } else {
+        grunt.config( 'uglify.target.options', {
+            sourceMap : true,
+            sourceMapName : function( path ){
+                // rewrite name to have all source maps in 'static/maps'
+                return path.replace( paths.dist, paths.maps ) + '.map';
             }
-        },
-    });
+        });
+        grunt.config( 'uglify.options', compressedSettings );
+    }
 
     // -------------------------------------------------------------------------- decompress for easier debugging
     grunt.registerTask( 'decompress', function(){
         grunt.log.writeln( "decompressing... (don't forget to call 'grunt' again before committing)" );
-        grunt.config( 'uglify.options', { beautify: true });
+        grunt.config( 'uglify.options', decompressedSettings );
         grunt.config( 'uglify.target.options', {});
         grunt.task.run( 'uglify' );
     });
     // alias for symmetry
     grunt.registerTask( 'compress', [ 'uglify' ] );
 
-    // -------------------------------------------------------------------------- copy,pack only those changed
-    // adapted from grunt-contrib-watch jslint example
-    //TODO: a bit hacky and there's prob. a better way
-    //NOTE: copy will fail silently if a file isn't found
+    // -------------------------------------------------------------------------- watch & copy,pack only those changed
+    // use 'grunt watch' (from a new tab in your terminal) to have grunt re-copy changed files automatically
+    grunt.config( 'watch', {
+        watch: {
+            // watch for changes in the src dir
+            files: [ paths.srcSymlink + '/**' ],
+            tasks: [ 'uglify' ],
+            options: {
+                spawn: false
+            }
+        }
+    });
+
 
     // outer scope variable for the event handler and onChange fn - begin with empty hash
     var changedFiles = Object.create(null);
@@ -89,23 +98,24 @@ module.exports = function( grunt ){
         grunt.log.writeln( 'onChange, changedFiles:', Object.keys( changedFiles ) );
         grunt.config( 'uglify.target.files', [{
             expand : true,
-            cwd : SRC_SYMLINK,
+            cwd : paths.srcSymlink,
             src : Object.keys( changedFiles ),
-            dest : DIST_PATH
+            dest : paths.dist
         }]);
         changedFiles = Object.create(null);
     }, 200);
 
-    grunt.event.on( 'watch', function( action, filepath ) {
+    var addChangedFile = function( action, filepath ) {
         // store each filepath in a Files obj, the debounced fn above will use it as an aggregate list for copying
         // we need to take galaxy/scripts out of the filepath or it will be copied to the wrong loc
-        filepath = filepath.replace( SRC_SYMLINK + '/', '' );
-        grunt.log.writeln( 'on.watch, filepath:', filepath );
-        changedFiles[filepath] = action;
+        filepath = filepath.replace( paths.srcSymlink + '/', '' );
+        // grunt.log.writeln( 'on.watch, filepath:', filepath );
+        changedFiles[ filepath ] = action;
         onChange();
-    });
+    };
+    grunt.event.on( 'watch', addChangedFile );
 
-
+    // --------------------------------------------------------------------------
     grunt.loadNpmTasks( 'grunt-contrib-watch' );
     grunt.loadNpmTasks( 'grunt-contrib-uglify' );
 };

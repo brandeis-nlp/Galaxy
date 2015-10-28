@@ -5,7 +5,7 @@ File input = new File(args[1])
 File output = new File(args[2])
 
 String[] lines = input.readLines()
-String key = lines[index]
+String key = lines[0]
 
 String url = "${server.url}/${masc.id}"
 

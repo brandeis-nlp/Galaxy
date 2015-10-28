@@ -1,0 +1,22 @@
+<tool id="masc.query" name="Query MASC" version="2.1.0">
+  <description>Simple path matching query for MASC.</description>
+  <command interpreter="lsd">masc_query.lsd $pattern $output</command>
+  <inputs>
+  	<param name="pattern" type="text" label="Pattern"/>
+  </inputs>
+  <outputs>
+    <data name="output" format="txt"/>
+  </outputs>
+  <!--
+  <tests>
+    <test>
+      <param name="input" value="/Users/suderman/Projects/Galaxy/text.json"/>
+      <output name="output" file="/Users/suderman/Projects/Galaxy/tokens.json"/>
+    </test>
+  </tests>
+  -->
+  <help>Retreives a list of documents that contain the pattern in the full path.
+  	<p>For example, query for <em>/blog/</em> to retrieve the IDs of all blog posts
+  	or <em>/enron/</em> to retrieve all Enron emails.</p>
+  </help>
+</tool>
