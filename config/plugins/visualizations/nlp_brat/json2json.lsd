@@ -2,7 +2,7 @@
 
 String lappsjson = new File(args[0]).text
 
-if (!lappsjson.trim().startWith("{")) {
+if (!lappsjson.trim().startsWith("{")) {
     println lappsjson
     return
 }
