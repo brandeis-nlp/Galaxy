@@ -290,8 +290,8 @@ root = h.url_for( '/' )
 
 ## ----------------------------------------------------------------------------
 <body>
-<h2  align="center">Online Visualization of LappsGrid</h2>
-<p style="text-align:center;font-size: 12pt;">
+<!--h2  align="center">Online Visualization of LappsGrid</h2>
+<p style="text-align:center;font-size: 12pt;"-->
     LappsGrid, <var>Version 0.3.0</var>,  May 2015</p>
 
 
