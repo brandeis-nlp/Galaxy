@@ -8,7 +8,7 @@ bratdsl = """{
     if (lastView == null) return
 
     def isText = %.has( &:discriminator,  "http://vocab.lappsgrid.org/ns/media/text")
-    def isLifTex = %.has( &:discriminator,  "http://vocab.lappsgrid.org/ns/media/jsonld#lif")
+    def isLifTex = %.has( &:discriminator,  "http://vocab.lappsgrid.org/ns/media/jsonld")
     def isCoref = %.has(lastView.metadata.contains,  "Coreference")
     def isDepParser = %.has(lastView.metadata.contains,  "DependencyStructure")
     def isParser = %.has(lastView.metadata.contains,  "Constituent")
@@ -54,7 +54,7 @@ bratdsl = """{
     }
 
     //if (isTagger) {
-        targetEntities += lastViewAnns.select{&.features.pos != null}.unique{ &.start + " " + &.end }.foreach {
+        targetEntities += lastViewAnns.select{&.features != null &&¡¡&.features.pos != null}.unique{ &.start + " " + &.end }.foreach {
             [&.id, %.toUpper(&.features.pos), [[&.start.toInteger(), &.end.toInteger()]]]
         }
     //}

@@ -1,6 +1,6 @@
 <tool id='stanfordnlp.coref' name='Stanford Coreference v2.0.1' version='2.0.1'>
   <description>Stanford Coref (Brandeis)</description>
-  <command interpreter='lsd'>../lapps_common/invoke_brandeis.lsd stanfordnlp.coref $input $output</command>
+  <command interpreter='lsd'>../lapps_common/invoke_brandeis.lsd stanfordnlp.coref_2.0.1 $input $output</command>
   <inputs>
     <param name='input' type='data' format='text' label='input' />
   </inputs>
