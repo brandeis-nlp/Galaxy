@@ -223,9 +223,7 @@ root = h.url_for( '/' )
                     $.extend({}, jQuery.parseJSON(docData.trim())), webFontURLs);
                 renderDotDisplay(dotDisplayId, inputId);
                 console.info("Finished: liveDispatch");
-                $("#preload").fadeOut(5000, function() {
-                    $('#' + inputId).fadeIn(1000);
-                });
+                $("#preload").fadeOut(4000, function(){});
             }catch(e) {
                 console.error("ERROR: "+e+" ;doc="+docData+"; coll="+collData);
             }
@@ -305,7 +303,7 @@ root = h.url_for( '/' )
     <table align="center" class="table table-bordered table-striped responsive-utilities" align="center" style="width:800px;">
         <tr><th> Display </th></tr>
         <tr><td height="100px"><div id="preload" style="width:100px;height:100px;position:fixed;top:50%;left:50%;">
-            <img src="${root}plugins/visualizations/nlp_brat/static/img/KUJoe.gif"></div>
+            <img src="${root}plugins/visualizations/nlp_brat/static/img/KUJoe.gif" onclick="javascript:$("#preload").fadeOut(100, function(){});></div>
             <div id="instantbratdisplay"></div></td></tr>
         <tr><td><div id="instantdotdisplay" style="display:none">Loading ...</div></td></tr>
     </table>
