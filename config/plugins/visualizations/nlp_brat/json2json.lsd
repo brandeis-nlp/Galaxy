@@ -9,6 +9,11 @@ bratdsl = """{
     def targetEquivs = []
     def targetEntities = []
 
+    if (! %.has(&:toString(), "discriminator")) {
+      text &:toString()
+      return
+    }
+    
     def discriminator = &:discriminator
     if (discriminator == null) return
 
