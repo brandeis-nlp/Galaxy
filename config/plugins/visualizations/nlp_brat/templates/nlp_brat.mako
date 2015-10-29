@@ -183,6 +183,9 @@ root = h.url_for( '/' )
             try {
                 liveDispatcher.post('requestRenderData', [$.extend({}, docJSON)]);
                 console.info("docChangeHandler");
+                $("#preload").fadeOut(5000, function() {
+                    $('#' + inputId).fadeIn(1000);
+                });
             } catch(e) {
                 console.error('requestRenderData went down with:', e);
             }
@@ -235,9 +238,6 @@ root = h.url_for( '/' )
             onchange(inputId, function() {
                 docChangeHandler(liveDispatcher, inputId);
                 renderDotDisplay(dotDisplayId, inputId);
-                $("#preload").fadeOut(2000, function() {
-                    $('#' + inputId).fadeIn(1000);
-                });
             });
 
             onchange(confInputId, function() {
