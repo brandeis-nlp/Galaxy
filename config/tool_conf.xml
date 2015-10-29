@@ -7,6 +7,12 @@
 		<tool file="lapps_datasource/masc_list.xml"/>
 		<tool file="lapps_datasource/masc_load.xml"/> 
 	</section>
+	<section id="splitters" name="Sentence Splitters">
+		<tool file="lapps_stanford/vassar.splitter_2.0.0.xml"/>
+		<tool file='lapps_stanford/brandeis.splitter.xml' />
+		<tool file="lapps_gate/gate.splitter_2.0.0.xml"/>
+		<tool file='lapps_opennlp/opennlp.splitter.xml' />
+	</section>
 	<section id="tokenizers" name="Tokenizers">
 		<tool file="lapps_stanford/vassar.tokenizer_2.0.0.xml"/>
 		<tool file='lapps_stanford/brandeis.tokenizer.xml' />
@@ -19,22 +25,16 @@
 		<tool file="lapps_gate/gate.tagger_2.0.0.xml"/>
 		<tool file='lapps_opennlp/opennlp.postagger.xml' />
 	</section>
-	<section id="splitters" name="Sentence Splitters">
-		<tool file="lapps_stanford/vassar.splitter_2.0.0.xml"/>
-		<tool file='lapps_stanford/brandeis.splitter.xml' />
-		<tool file="lapps_gate/gate.splitter_2.0.0.xml"/>
-		<tool file='lapps_opennlp/opennlp.splitter.xml' />
+	<section id="parsers" name="Parsers">
+		<tool file='lapps_stanford/brandeis.parser.xml' />
+		<tool file='lapps_opennlp/opennlp.parser.xml' />
+		<tool file='lapps_stanford/brandeis.dependencyparser.xml' />
 	</section>
 	<section id="ner" name="Named Entity Recognizers">
 		<tool file="lapps_stanford/vassar.ner_2.0.0.xml"/>
 		<tool file='lapps_stanford/brandeis.namedentityrecognizer.xml' />
 		<tool file="lapps_gate/gate.ner_2.0.0.xml"/>
 		<tool file='lapps_opennlp/opennlp.namedentityrecognizer.xml' />
-	</section>
-	<section id="parsers" name="Parsers">
-		<tool file='lapps_stanford/brandeis.parser.xml' />
-		<tool file='lapps_opennlp/opennlp.parser.xml' />
-		<tool file='lapps_stanford/brandeis.dependencyparser.xml' />
 	</section>
 	<section id="chunkers" name="Chunkers">
 		<tool file="lapps_gate/gate.npchunker_2.0.0.xml"/>
