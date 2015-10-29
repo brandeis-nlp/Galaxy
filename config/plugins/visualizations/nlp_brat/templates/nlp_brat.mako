@@ -9,7 +9,7 @@ lappsjson = hda.get_raw_data()
 lappsjsonfil = hda.dataset.file_name
 lsdpath = os.path.join(os.getcwd(),'config/plugins/visualizations/nlp_brat/json2json.lsd')
 bratjson = """{
-    "text" : "Loading ..."
+    "text" : "Unknown Text ..."
 }"""
 output = subprocess.Popen([lsdpath, lappsjsonfil], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 outputjson = output.stdout.read()
