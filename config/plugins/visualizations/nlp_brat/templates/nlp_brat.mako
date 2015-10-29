@@ -13,7 +13,7 @@ bratjson = """{
 }"""
 output = subprocess.Popen([lsdpath, lappsjsonfil], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 outputjson = output.stdout.read()
-if not "http://vocab.lappsgrid.org/ns/error" in outputjson:
+if "payload" in outputjson and "targets" in outputjson and not "http://vocab.lappsgrid.org/ns/error" in outputjson:
     bratjson = json.loads(outputjson)["payload"]["targets"][0]
 json2jsonexp = output.stderr
 %>
