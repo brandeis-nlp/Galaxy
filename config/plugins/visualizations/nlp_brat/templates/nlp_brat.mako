@@ -183,9 +183,6 @@ root = h.url_for( '/' )
             try {
                 liveDispatcher.post('requestRenderData', [$.extend({}, docJSON)]);
                 console.info("docChangeHandler");
-                $("#preload").fadeOut(5000, function() {
-                    $('#' + inputId).fadeIn(1000);
-                });
             } catch(e) {
                 console.error('requestRenderData went down with:', e);
             }
@@ -226,6 +223,9 @@ root = h.url_for( '/' )
                     $.extend({}, jQuery.parseJSON(docData.trim())), webFontURLs);
                 renderDotDisplay(dotDisplayId, inputId);
                 console.info("Finished: liveDispatch");
+                $("#preload").fadeOut(5000, function() {
+                    $('#' + inputId).fadeIn(1000);
+                });
             }catch(e) {
                 console.error("ERROR: "+e+" ;doc="+docData+"; coll="+collData);
             }
