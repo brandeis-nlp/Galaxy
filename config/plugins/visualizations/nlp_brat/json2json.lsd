@@ -2,6 +2,12 @@
 
 String lappsjson = new File(args[0]).text
 
+if (!lappsjson.trim().startWith("{")) {
+    println lappsjson
+    return
+}
+
+
 bratdsl = """{
 
     def targetText = ""
@@ -13,7 +19,7 @@ bratdsl = """{
       text &:toString()
       return
     }
-    
+
     def discriminator = &:discriminator
     if (discriminator == null) return
 
