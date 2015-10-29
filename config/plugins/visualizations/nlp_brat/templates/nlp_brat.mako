@@ -304,8 +304,8 @@ root = h.url_for( '/' )
 
     <table align="center" class="table table-bordered table-striped responsive-utilities" align="center" style="width:800px;">
         <tr><th> Display </th></tr>
-        <tr><td height="100px"><div id="preload" style="width:100px;height: 100px; position: fixed; top: 50%; left: 50%;">
-            <img src="http://i.imgur.com/KUJoe.gif"></div>
+        <tr><td height="100px"><div id="preload" style="width:100px;height:100px;position:fixed;top:50%;left:50%;">
+            <img src="${root}plugins/visualizations/nlp_brat/static/img/KUJoe.gif"></div>
             <div id="instantbratdisplay"></div></td></tr>
         <tr><td><div id="instantdotdisplay" style="display:none">Loading ...</div></td></tr>
     </table>
