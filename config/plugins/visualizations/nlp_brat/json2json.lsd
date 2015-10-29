@@ -28,7 +28,7 @@ bratdsl = """{
     if (isLifTex) targetText = &:payload.text."@value"
 
     if (isParser) {
-        targetText +=  "\n~~~\n" + lastViewAnns.select{ %.has(&."@type", "PhraseStructure") }.features.penntree[0]
+        targetText +=  """\n~~~\n""" + lastViewAnns.select{ %.has(&."@type", "PhraseStructure") }.features.penntree[0]
     }
 
     if (isDepParser) {
