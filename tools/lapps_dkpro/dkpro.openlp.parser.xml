@@ -1,0 +1,10 @@
+<tool id='dkpro.parser' name='DkPro OpenNLP Parser v0.0.1' version='0.0.1'>
+  <description>DKPRO OPENNLP Parser</description>
+  <command interpreter='lsd'>../lapps_common/invoke_brandeis.lsd uima.dkpro.opennlp.parser_0.0.1 $input $output</command>
+  <inputs>
+    <param name='input' type='data' format='lif' label='input' />
+  </inputs>
+  <outputs>
+    <data name='output' format='lif' />
+  </outputs>
+</tool>

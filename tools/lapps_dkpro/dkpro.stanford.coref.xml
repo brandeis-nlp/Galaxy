@@ -1,0 +1,10 @@
+<tool id='dkpro.coref' name='DkPro Stanford Coreference v0.0.1' version='0.0.1'>
+  <description>DKPRO Stanford Coref (Brandeis)</description>
+  <command interpreter='lsd'>../lapps_common/invoke_brandeis.lsd uima.dkpro.stanfordnlp.coref_0.0.1 $input $output</command>
+  <inputs>
+    <param name='input' type='data' format='lif' label='input' />
+  </inputs>
+  <outputs>
+    <data name='output' format='lif' />
+  </outputs>
+</tool>

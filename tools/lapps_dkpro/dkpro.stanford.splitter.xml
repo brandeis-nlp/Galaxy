@@ -1,0 +1,10 @@
+<tool id='dkpro.splitter' name='DkPro Stanford Splitter v0.0.1' version='0.0.1'>
+  <description>DKPRO Stanford Splitter</description>
+  <command interpreter='lsd'>../lapps_common/invoke_brandeis.lsd uima.dkpro.stanfordnlp.splitter_0.0.1 $input $output</command>
+  <inputs>
+    <param name='input' type='data' format='text' label='input' />
+  </inputs>
+  <outputs>
+    <data name='output' format='lif' />
+  </outputs>
+</tool>
