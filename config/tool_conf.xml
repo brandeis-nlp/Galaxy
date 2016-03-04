@@ -89,11 +89,11 @@
 		<tool file='lapps_dkpro/dkpro.stanford.parser.xml' />
 		<tool file='lapps_dkpro/dkpro.stanford.namedentityrecognizer.xml' />
 		<tool file='lapps_dkpro/dkpro.stanford.coref.xml' />
-		<tool file='lapps_dkpro/dkpro.openlp.splitter.xml' />
-		<tool file='lapps_dkpro/dkpro.openlp.tokenizer.xml' />
-		<tool file='lapps_dkpro/dkpro.openlp.postagger.xml' />
-		<tool file='lapps_dkpro/dkpro.openlp.parser.xml' />
-		<tool file='lapps_dkpro/dkpro.openlp.namedentityrecognizer.xml' />
+		<tool file='lapps_dkpro/dkpro.opennlp.splitter.xml' />
+		<tool file='lapps_dkpro/dkpro.opennlp.tokenizer.xml' />
+		<tool file='lapps_dkpro/dkpro.opennlp.postagger.xml' />
+		<tool file='lapps_dkpro/dkpro.opennlp.parser.xml' />
+		<tool file='lapps_dkpro/dkpro.opennlp.namedentityrecognizer.xml' />
 	</section>
 	<section id="kyoto.grid" name="Kyoto Node">
 		<tool file='lapps_kyoto/opennlp_postagger.xml'/>
