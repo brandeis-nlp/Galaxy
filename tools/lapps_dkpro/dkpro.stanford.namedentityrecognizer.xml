@@ -1,4 +1,4 @@
-<tool id='dkpro.namedentityrecognizer' name='DKPro Core Stanford NamedEntityRecognizer v0.0.1' version='0.0.1'>
+<tool id='dkpro.namedentityrecognizer' name='DKPro Core Stanford NamedEntityRecognizer v1.7.0' version='0.0.1'>
   <description>DKPro Core Stanford NamedEntityRecognizer</description>
   <command interpreter='lsd'>../lapps_common/invoke_brandeis.lsd uima.dkpro.stanfordnlp.namedentityrecognizer_0.0.1 $input $output</command>
   <inputs>

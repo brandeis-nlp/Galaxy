@@ -1,4 +1,4 @@
-<tool id='dkpro.splitter' name='DKPro Core OpenNLP Splitter v0.0.1' version='0.0.1'>
+<tool id='dkpro.splitter' name='DKPro Core OpenNLP Splitter v1.7.0' version='0.0.1'>
   <description>DKPro Core OpenNLP Splitter</description>
   <command interpreter='lsd'>../lapps_common/invoke_brandeis.lsd uima.dkpro.opennlp.splitter_0.0.1 $input $output</command>
   <inputs>
