@@ -82,7 +82,7 @@
 	  <tool file='lapps_opennlp/opennlp.namedentityrecognizer.xml' />
 	  <tool file='lapps_opennlp/opennlp.parser.xml' />
 	</section>
-	<section id='dkpro.tools' name='DkPro'>
+	<section id='dkpro.tools' name='DKPro Core'>
 		<tool file='lapps_dkpro/dkpro.stanford.splitter.xml' />
 		<tool file='lapps_dkpro/dkpro.stanford.tokenizer.xml' />
 		<tool file='lapps_dkpro/dkpro.stanford.postagger.xml' />

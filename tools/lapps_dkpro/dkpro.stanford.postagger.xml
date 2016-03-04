@@ -1,5 +1,5 @@
-<tool id='dkpro.postagger' name='DkPro Stanford POSTagger v0.0.1' version='0.0.1'>
-  <description>DKPRO Stanford POSTagger</description>
+<tool id='dkpro.postagger' name='DKPro Core Stanford POSTagger v0.0.1' version='0.0.1'>
+  <description>DKPro Core Stanford POSTagger</description>
   <command interpreter='lsd'>../lapps_common/invoke_brandeis.lsd uima.dkpro.stanfordnlp.postagger_0.0.1 $input $output</command>
   <inputs>
     <param name='input' type='data' format='lif' label='input' />

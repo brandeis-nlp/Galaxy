@@ -1,5 +1,5 @@
-<tool id='dkpro.parser' name='DkPro Stanford Parser v0.0.1' version='0.0.1'>
-  <description>DKPRO Stanford Parser</description>
+<tool id='dkpro.parser' name='DKPro Core Stanford Parser v0.0.1' version='0.0.1'>
+  <description>DKPro Core Stanford Parser</description>
   <command interpreter='lsd'>../lapps_common/invoke_brandeis.lsd uima.dkpro.stanfordnlp.parser_0.0.1 $input $output</command>
   <inputs>
     <param name='input' type='data' format='lif' label='input' />

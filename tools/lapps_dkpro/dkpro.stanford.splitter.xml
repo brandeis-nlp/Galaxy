@@ -1,5 +1,5 @@
-<tool id='dkpro.splitter' name='DkPro Stanford Splitter v0.0.1' version='0.0.1'>
-  <description>DKPRO Stanford Splitter</description>
+<tool id='dkpro.splitter' name='DKPro Core Stanford Splitter v0.0.1' version='0.0.1'>
+  <description>DKPro Core Stanford Splitter</description>
   <command interpreter='lsd'>../lapps_common/invoke_brandeis.lsd uima.dkpro.stanfordnlp.splitter_0.0.1 $input $output</command>
   <inputs>
     <param name='input' type='data' format='text' label='input' />

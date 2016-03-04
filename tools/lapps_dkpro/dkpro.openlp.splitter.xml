@@ -1,5 +1,5 @@
-<tool id='dkpro.splitter' name='DkPro OpenNLP Splitter v0.0.1' version='0.0.1'>
-  <description>DKPRO OPENNLP Splitter</description>
+<tool id='dkpro.splitter' name='DKPro Core OpenNLP Splitter v0.0.1' version='0.0.1'>
+  <description>DKPro Core OpenNLP Splitter</description>
   <command interpreter='lsd'>../lapps_common/invoke_brandeis.lsd uima.dkpro.opennlp.splitter_0.0.1 $input $output</command>
   <inputs>
     <param name='input' type='data' format='text' label='input' />
